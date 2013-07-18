@@ -18,10 +18,6 @@ Todo: pretty this up
     then by timestamp range                            start={time}
      requires start                                    end={time}
     
-    by user=?                        /user/:user?
-    and timestamp range                          start={time}
-     requires start                              end={time}
-    
     capped collection info: /cutoff
     returns dates for the oldest documents in messages and statuses
     {

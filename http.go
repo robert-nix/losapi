@@ -9,13 +9,11 @@ import (
 var badRequest = `{"status":"nok", "reason":"Bad request"}`
 var serverError = `{"status":"nok", "reason":"Internal server error"}`
 
-var userPath = "/user/"
 var channelPath = "/channel/"
 var messagesPath = "/messages"
 
 func httpServer() {
   http.HandleFunc(messagesPath, handleMessages)
-  http.HandleFunc(userPath, handleStatusesUser)
   http.HandleFunc(channelPath, handleStatusesChannel)
 
   dialString := fmt.Sprintf(":%d", config.HttpPort)
