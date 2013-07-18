@@ -36,21 +36,11 @@ func handleMessages(w http.ResponseWriter, r *http.Request) {
     findQuery["channel"] = channel
     canMatch = true
   }
-  if start := query.Get("start"); start != "" {
-    timeRange := dbM{}
-    startTime := jsDateToTime(start)
-    timeRange["$gt"] = startTime
-    if end := query.Get("end"); end != "" {
-      endTime := jsDateToTime(end)
-      timeRange["$lt"] = endTime
-      if endTime.Sub(startTime) < 12*time.Hour {
-        canMatch = true
-      }
-    }
-    if time.Now().Sub(startTime) < 12*time.Hour {
+  if timeRange, duration := buildTimeRange(query); timeRange != nil {
+    findQuery["received"] = timeRange
+    if duration > 12*time.Hour {
       canMatch = true
     }
-    findQuery["received"] = timeRange
   }
   if match := query.Get("match"); canMatch && match != "" {
     findQuery["message"] = dbM{

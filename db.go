@@ -4,8 +4,9 @@ import (
   "github.com/Mischanix/applog"
   "github.com/Mischanix/wait"
   "labix.org/v2/mgo"
+  "net/url"
   "strconv"
-  // "time"
+  "time"
 )
 
 var db struct {
@@ -26,11 +27,11 @@ type msgDoc struct {
 }
 
 type statusDoc struct {
-  Channel   string   `json:"channel"`
-  Timestamp jsDate   `json:"timestamp"`
-  Status    string   `json:"status"`
-  Users     []string `json:"users"`
-  Viewers   int      `json:"viewers"`
+  Channel   string `json:"channel"`
+  Timestamp jsDate `json:"timestamp"`
+  Status    string `json:"status"`
+  Viewers   int    `json:"viewers"`
+  // Users  []string `json:"users"` // unused
 }
 
 func dbClient() {
@@ -57,4 +58,22 @@ func querySkipLimit(dbQuery *mgo.Query, skip string, limit string) *mgo.Query {
   }
 
   return dbQuery.Skip(skipCount).Limit(limitCount)
+}
+
+func buildTimeRange(query url.Values) (dbM, time.Duration) {
+  if start := query.Get("start"); start != "" {
+    var duration time.Duration
+    timeRange := dbM{}
+    startTime := jsDateToTime(start)
+    timeRange["$gt"] = startTime
+    if end := query.Get("end"); end != "" {
+      endTime := jsDateToTime(end)
+      timeRange["$lt"] = endTime
+      duration = endTime.Sub(startTime)
+    } else {
+      duration = time.Now().Sub(startTime)
+    }
+    return timeRange, duration
+  }
+  return nil, -1
 }

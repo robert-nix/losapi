@@ -9,8 +9,15 @@ import (
 var badRequest = `{"status":"nok", "reason":"Bad request"}`
 var serverError = `{"status":"nok", "reason":"Internal server error"}`
 
+var userPath = "/user/"
+var channelPath = "/channel/"
+var messagesPath = "/messages"
+
 func httpServer() {
-  http.HandleFunc("/messages", handleMessages)
+  http.HandleFunc(messagesPath, handleMessages)
+  http.HandleFunc(userPath, handleStatusesUser)
+  http.HandleFunc(channelPath, handleStatusesChannel)
+
   dialString := fmt.Sprintf(":%d", config.HttpPort)
   if err := http.ListenAndServe(dialString, nil); err != nil {
     applog.Error("httpServer: ListenAndServe error: %v", err)
