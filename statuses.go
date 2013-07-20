@@ -4,6 +4,7 @@ import (
   "github.com/Mischanix/applog"
   "net/http"
   "net/url"
+  "strings"
 )
 
 // statuses: all sort timestamp_-1 :
@@ -20,7 +21,7 @@ func handleStatusesChannel(w http.ResponseWriter, r *http.Request) {
   channel := uri.Path[len(channelPath):]
 
   query := uri.Query()
-  findQuery := dbM{"channel": channel}
+  findQuery := dbM{"channel": strings.ToLower(channel)}
   if timeRange, _ := buildTimeRange(query); timeRange != nil {
     findQuery["timestamp"] = timeRange
   }

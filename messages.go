@@ -4,6 +4,7 @@ import (
   "github.com/Mischanix/applog"
   "net/http"
   "net/url"
+  "strings"
   "time"
 )
 
@@ -29,15 +30,15 @@ func handleMessages(w http.ResponseWriter, r *http.Request) {
   // such that this won't murder the server
   canMatch := false
   if user := query.Get("user"); user != "" {
-    findQuery["user"] = user
+    findQuery["user"] = strings.ToLower(user)
     canMatch = true
   }
   if channel := query.Get("channel"); channel != "" {
-    findQuery["channel"] = channel
+    findQuery["channel"] = strings.ToLower(channel)
     canMatch = true
   }
   if command := query.Get("command"); command != "" {
-    findQuery["command"] = command
+    findQuery["command"] = strings.ToUpper(command)
   } else if isCommand := query.Get("is_command"); isCommand != "" {
     if isCommand == "true" {
       findQuery["command"] = dbM{"$exists": true}
