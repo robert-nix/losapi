@@ -23,7 +23,9 @@ type msgDoc struct {
   User     string `json:"user"`
   Channel  string `json:"channel"`
   Received jsDate `json:"received"`
-  Message  string `json:"message"`
+  Message  string `json:"message,omitempty"`
+  Command  string `json:"message,omitempty"`
+  Arg      string `json:"message,omitempty"`
 }
 
 type statusDoc struct {

@@ -36,6 +36,9 @@ func handleMessages(w http.ResponseWriter, r *http.Request) {
     findQuery["channel"] = channel
     canMatch = true
   }
+  if command := query.Get("command"); command != "" {
+    findQuery["command"] = command
+  }
   if timeRange, duration := buildTimeRange(query); timeRange != nil {
     findQuery["received"] = timeRange
     if duration > 12*time.Hour {

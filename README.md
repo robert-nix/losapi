@@ -9,6 +9,7 @@ Todo: pretty this up
     messages: all sort received_-1 : /messages?
     by user=?                                  user={user}
     by channel=?                               channel={channel}
+    by command=?                               command={command}
     received range:                            start={time}
     end requires start to have effect          end={time}
     then filter regex/i                        match={string}
