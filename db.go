@@ -21,11 +21,11 @@ type dbM map[string]interface{}
 
 type msgDoc struct {
   User     string `json:"user"`
-  Channel  string `json:"channel"`
+  Channel  string `json:"channel,omitempty"`
   Received jsDate `json:"received"`
   Message  string `json:"message,omitempty"`
-  Command  string `json:"message,omitempty"`
-  Arg      string `json:"message,omitempty"`
+  Command  string `json:"command,omitempty"`
+  Arg      string `json:"arg,omitempty"`
 }
 
 type statusDoc struct {
