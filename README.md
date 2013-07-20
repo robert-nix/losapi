@@ -10,6 +10,7 @@ Todo: pretty this up
     by user=?                                  user={user}
     by channel=?                               channel={channel}
     by command=?                               command={command}
+    filter out/only commands                   is_command=[true|false]
     received range:                            start={time}
     end requires start to have effect          end={time}
     then filter regex/i                        match={string}

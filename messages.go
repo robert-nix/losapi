@@ -10,6 +10,8 @@ import (
 // messages: all sort received_-1 : /messages?
 // by user=?                                  user={user}
 // by channel=?                               channel={channel}
+// by command=?                               command={command}
+// filter out/only commands                   is_command=[true|false]
 // received range:                            start={time}
 // end requires start to have effect          end={time}
 // then filter regex/i                        match={string}
@@ -34,9 +36,12 @@ func handleMessages(w http.ResponseWriter, r *http.Request) {
     findQuery["channel"] = channel
     canMatch = true
   }
-  if command, ok := query["command"]; ok {
-    if len(command) > 0 && command[0] != "" {
-      findQuery["command"] = command[0]
+  if command := query.Get("command"); command != "" {
+    findQuery["command"] = command[0]
+  }
+  if isCommand := query.Get("is_command"); isCommand != "" {
+    if isCommand == "true" {
+      findQuery["command"] = dbM{"$exists": true}
     } else {
       findQuery["command"] = dbM{"$exists": false}
     }
