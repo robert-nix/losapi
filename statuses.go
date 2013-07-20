@@ -11,8 +11,6 @@ import (
 // then by timestamp range                            start={time}
 //  requires start                                    end={time}
 func handleStatusesChannel(w http.ResponseWriter, r *http.Request) {
-  applog.Info("/channel/: uri=%q", r.RequestURI)
-
   uri, err := url.ParseRequestURI(r.RequestURI)
   if err != nil {
     applog.Info("/channel/: ParseRequestURI failed: %v", err)

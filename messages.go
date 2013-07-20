@@ -14,8 +14,6 @@ import (
 // end requires start to have effect          end={time}
 // then filter regex/i                        match={string}
 func handleMessages(w http.ResponseWriter, r *http.Request) {
-  applog.Info("/messages: uri=%q", r.RequestURI)
-
   uri, err := url.ParseRequestURI(r.RequestURI)
   if err != nil {
     applog.Info("/messages: ParseRequestURI failed: %v", err)
