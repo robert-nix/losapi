@@ -37,9 +37,8 @@ func handleMessages(w http.ResponseWriter, r *http.Request) {
     canMatch = true
   }
   if command := query.Get("command"); command != "" {
-    findQuery["command"] = command[0]
-  }
-  if isCommand := query.Get("is_command"); isCommand != "" {
+    findQuery["command"] = command
+  } else if isCommand := query.Get("is_command"); isCommand != "" {
     if isCommand == "true" {
       findQuery["command"] = dbM{"$exists": true}
     } else {
