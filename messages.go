@@ -34,8 +34,12 @@ func handleMessages(w http.ResponseWriter, r *http.Request) {
     findQuery["channel"] = channel
     canMatch = true
   }
-  if command := query.Get("command"); command != "" {
-    findQuery["command"] = command
+  if command, ok := query["command"]; ok {
+    if len(command) > 0 && command[0] != "" {
+      findQuery["command"] = command[0]
+    } else {
+      findQuery["command"] = dbM{"$exists": false}
+    }
   }
   if timeRange, duration := buildTimeRange(query); timeRange != nil {
     findQuery["received"] = timeRange
