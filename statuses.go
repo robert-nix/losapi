@@ -15,7 +15,7 @@ func handleStatusesChannel(w http.ResponseWriter, r *http.Request) {
   uri, err := url.ParseRequestURI(r.RequestURI)
   if err != nil {
     applog.Info("/channel/: ParseRequestURI failed: %v", err)
-    http.Error(w, badRequest, 400)
+    errJson(w, badRequest, 400)
     return
   }
   channel := uri.Path[len(channelPath):]
@@ -42,7 +42,7 @@ func writeStatuses(w http.ResponseWriter, findQuery dbM, query url.Values) {
   result.Count, err = dbQuery.Count()
   if err != nil {
     applog.Error("writeStatuses: query.Count failed: %v", err)
-    http.Error(w, serverError, 500)
+    errJson(w, serverError, 500)
     return
   }
 
@@ -51,7 +51,7 @@ func writeStatuses(w http.ResponseWriter, findQuery dbM, query url.Values) {
   ).All(&result.Statuses)
   if err != nil {
     applog.Error("writeStatuses: query.All failed: %v", err)
-    http.Error(w, serverError, 500)
+    errJson(w, serverError, 500)
     return
   }
 

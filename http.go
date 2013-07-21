@@ -7,8 +7,8 @@ import (
   "time"
 )
 
-var badRequest = `{"status":"nok", "reason":"Bad request"}`
-var serverError = `{"status":"nok", "reason":"Internal server error"}`
+var badRequest = "Bad request"
+var serverError = "Internal server error"
 
 var channelPath = "/channel/"
 var messagesPath = "/messages"
