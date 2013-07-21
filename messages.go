@@ -26,30 +26,24 @@ func handleMessages(w http.ResponseWriter, r *http.Request) {
   query := uri.Query()
   findQuery := dbM{}
 
-  commandQueried := false
   canQuery := false
   if user := query.Get("user"); user != "" {
     canQuery = true
     findQuery["user"] = strings.ToLower(user)
-
-    // user implies command can exist
-    if command := query.Get("command"); command != "" {
-      findQuery["command"] = strings.ToUpper(command)
-      commandQueried = true
-    } else if isCommand := query.Get("is_command"); isCommand != "" {
-      commandQueried = true
-      if isCommand == "true" {
-        findQuery["command"] = dbM{"$ne": nil}
-      } else {
-        findQuery["command"] = nil
-      }
-    }
   }
-
-  // channel implies command cannot exist
-  if channel := query.Get("channel"); !commandQueried && channel != "" {
+  if channel := query.Get("channel"); channel != "" {
     canQuery = true
     findQuery["channel"] = strings.ToLower(channel)
+  }
+
+  if command := query.Get("command"); command != "" {
+    findQuery["command"] = strings.ToUpper(command)
+  } else if isCommand := query.Get("is_command"); isCommand != "" {
+    if isCommand == "true" {
+      findQuery["command"] = dbM{"$ne": nil}
+    } else {
+      findQuery["command"] = nil
+    }
   }
   if timeRange, _ := buildTimeRange(query); timeRange != nil {
     findQuery["received"] = timeRange
