@@ -52,8 +52,13 @@ func regexEscape(regex string) (result string) {
   return result
 }
 
-func writeJson(w http.ResponseWriter, result interface{}) {
+func responseHeaders(w http.ResponseWriter) {
   w.Header().Set("Content-Type", "application/json")
+  w.Header().Set("Access-Control-Allow-Origin", "*")
+}
+
+func writeJson(w http.ResponseWriter, result interface{}) {
+  responseHeaders(w)
   w.WriteHeader(200)
   if err := json.NewEncoder(w).Encode(result); err != nil {
     applog.Error("writeJson: json Encode failed: %v", err)
@@ -61,7 +66,7 @@ func writeJson(w http.ResponseWriter, result interface{}) {
 }
 
 func errJson(w http.ResponseWriter, error string, code int) {
-  w.Header().Set("Content-Type", "application/json")
+  responseHeaders(w)
   w.WriteHeader(code)
   if err := json.NewEncoder(w).Encode(struct {
     Status string `json:"status"`
