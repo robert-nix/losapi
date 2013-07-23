@@ -29,7 +29,15 @@ func handleMessages(w http.ResponseWriter, r *http.Request) {
   canQuery := false
   if user := query.Get("user"); user != "" {
     canQuery = true
-    findQuery["user"] = strings.ToLower(user)
+    if strings.ContainsRune(user, ',') {
+      users := strings.Split(user, ",")
+      for n, u := range users {
+        users[n] = strings.ToLower(u)
+      }
+      findQuery["user"] = dbM{"$in": users}
+    } else {
+      findQuery["user"] = strings.ToLower(user)
+    }
   }
   if channel := query.Get("channel"); channel != "" {
     canQuery = true
